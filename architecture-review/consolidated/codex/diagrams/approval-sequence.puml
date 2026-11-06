@@ -1,0 +1,18 @@
+@startuml
+title Approval transaction
+actor Reviewer
+participant API
+participant Domain
+database Records
+Reviewer -> API: decide(revision, key, version)
+API -> Domain: authorize + validate
+Domain -> Records: BEGIN / version check
+Domain -> Records: unique decision insert
+alt approved
+ Domain -> Records: unique effect batch + state APPROVED
+else rejected
+ Domain -> Records: state REJECTED + audit
+end
+Records --> Domain: COMMIT
+Domain --> API: stable result or conflict
+@enduml

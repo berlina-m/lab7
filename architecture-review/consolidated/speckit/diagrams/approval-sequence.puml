@@ -1,0 +1,21 @@
+@startuml
+title Approval with atomic financial effect
+actor Reviewer
+participant API
+participant "Application/use case" as UC
+database DB
+participant Outbox
+Reviewer -> API: decide(expense, decision, idempotencyKey, version)
+API -> UC: authenticate + authorize + validate
+UC -> DB: BEGIN; lock/version-check expense
+UC -> DB: insert unique decision
+alt final approval
+ UC -> DB: insert unique effect batch\n(no self-debt; conservation)
+ UC -> DB: transition APPROVED
+else rejection
+ UC -> DB: transition REJECTED + audit
+end
+UC -> DB: COMMIT
+UC -> Outbox: enqueue after commit
+API --> Reviewer: result / already-applied / conflict
+@enduml

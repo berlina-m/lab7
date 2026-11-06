@@ -1,0 +1,20 @@
+@startuml
+title Payment transaction
+actor Member
+participant API
+participant Domain
+database Effects
+Member -> API: pay(key, version)
+API -> Domain: authenticate/authorize
+Domain -> Effects: BEGIN; lock/version check
+Domain -> Effects: calculate remaining from effects
+alt valid unique payment
+ Domain -> Effects: insert payment + settlement effect
+ Domain -> Effects: COMMIT
+else duplicate
+ Domain --> API: original result
+else conflict/overpayment
+ Domain -> Effects: ROLLBACK
+end
+API --> Member: result
+@enduml

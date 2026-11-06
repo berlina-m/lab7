@@ -1,0 +1,20 @@
+@startuml
+title Payment with concurrency and idempotency
+actor User
+participant API
+participant UC
+database Ledger
+User -> API: record payment(idempotencyKey, version)
+API -> UC: authorize + validate
+UC -> Ledger: BEGIN; lock/version-check obligation
+UC -> Ledger: re-read effects and remaining amount
+alt valid and unique
+ UC -> Ledger: insert payment + settlement effect
+ UC -> Ledger: COMMIT
+else duplicate
+ UC -> Ledger: return original result
+else overspend/conflict
+ UC -> Ledger: ROLLBACK
+end
+API --> User: result
+@enduml

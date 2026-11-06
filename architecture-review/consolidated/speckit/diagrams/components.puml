@@ -1,0 +1,30 @@
+@startuml
+title Logical components and dependency direction
+package "Clients" { [Web] [Android] [iOS] [Swing MVP] }
+package "Application core" {
+ [Use cases]
+ [Domain rules\nallocation approval ledger payment]
+ interface "Persistence port" as P
+ interface "Identity port" as I
+ interface "Receipt port" as R
+ interface "Notification port" as N
+ interface "Report port" as Q
+}
+package "Infrastructure adapters" { [Persistence adapter] [Identity adapter] [Receipt adapter] [Notification adapter] [Reporting adapter] }
+[Web] --> [Use cases]
+[Android] --> [Use cases]
+[iOS] --> [Use cases]
+[Swing MVP] --> [Use cases]
+[Use cases] --> [Domain rules]
+[Use cases] --> P
+[Use cases] --> I
+[Use cases] --> R
+[Use cases] --> N
+[Use cases] --> Q
+[Persistence adapter] ..|> P
+[Identity adapter] ..|> I
+[Receipt adapter] ..|> R
+[Notification adapter] ..|> N
+[Reporting adapter] ..|> Q
+note "No dependency from core to concrete adapters" as X
+@enduml

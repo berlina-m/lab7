@@ -1,0 +1,17 @@
+@startuml
+title Trust boundary
+boundary "Client/untrusted" { node Web; node Android; node iOS; node Swing }
+boundary "Service/trusted" { node API; node Application; node Domain; database Effects; node Auth; node Receipt; node Notify; node Report }
+Web --> API
+Android --> API
+iOS --> API
+Swing --> API
+API --> Application
+Application --> Domain
+Application --> Effects
+Application --> Auth
+Application --> Receipt
+Application --> Notify
+Application --> Report
+note "All authorization, allocation, approval, payment, and report access checks are service-side."
+@enduml

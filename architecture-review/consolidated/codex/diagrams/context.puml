@@ -1,0 +1,26 @@
+@startuml
+title SplitSmart channels and service
+actor Member
+rectangle Web
+rectangle Android
+rectangle iOS
+rectangle "Swing MVP / prototype" as Swing
+rectangle "Application service\ntrusted business rules" as S
+database "Effects and records" as E
+cloud Identity
+cloud "Receipt store" as R
+cloud Notifications as N
+Member --> Web
+Member --> Android
+Member --> iOS
+Member --> Swing
+Web --> S
+Android --> S
+iOS --> S
+Swing --> S : common ports / limited demo
+S --> E
+S --> Identity
+S --> R
+S --> N
+note right of Swing: Not the full web/mobile product
+@enduml

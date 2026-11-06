@@ -1,0 +1,29 @@
+@startuml
+title SplitSmart system context
+actor User
+rectangle "Web client" as Web
+rectangle "Android client" as Android
+rectangle "iOS client" as IOS
+rectangle "Java Swing MVP\n(limited prototype)" as Swing
+rectangle "SplitSmart application/service\nserver-side rules" as Service
+cloud "Identity" as Id
+cloud "Receipt storage" as Receipt
+cloud "Notification delivery" as Notify
+database "Authoritative financial records" as DB
+User --> Web
+User --> Android
+User --> IOS
+User --> Swing
+Web --> Service
+Android --> Service
+IOS --> Service
+Swing --> Service : same ports / demo adapter
+Service --> Id
+Service --> Receipt
+Service --> Notify
+Service --> DB
+note right of Swing
+Does not by itself satisfy
+full web/mobile scope or FR-014/NFR-006
+end note
+@enduml

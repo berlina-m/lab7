@@ -1,0 +1,15 @@
+@startuml
+title Expense and financial domain
+class ExpenseRevision { state; version; payer; total: BigDecimal; orderedParticipants }
+class Allocation { sequence; participant; amount: BigDecimal }
+class ApprovalDecision { reviewer; decision; idempotencyKey }
+class FinancialEffect { source; from; to; amount: BigDecimal }
+class Payment { idempotencyKey; amount: BigDecimal }
+class BalanceProjection { pair; currency; net: BigDecimal }
+ExpenseRevision *-- Allocation
+ExpenseRevision *-- ApprovalDecision
+ExpenseRevision --> FinancialEffect : approval only
+Payment --> FinancialEffect : settlement
+FinancialEffect --> BalanceProjection : rebuild/reconcile
+note "Self allocation becomes no self-obligation; participant order is semantic"
+@enduml

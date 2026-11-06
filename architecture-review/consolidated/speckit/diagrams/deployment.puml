@@ -1,0 +1,31 @@
+@startuml
+title Logical trust boundary and runtime topology
+boundary "Untrusted client boundary" {
+ node Web
+ node Android
+ node iOS
+ node Swing
+}
+boundary "Trusted service boundary" {
+ node API
+ node Application
+ node Domain
+ node Identity
+ node ReceiptAdapter
+ node NotificationAdapter
+ node ReportAdapter
+ database SourceEffects
+}
+Web --> API
+Android --> API
+iOS --> API
+Swing --> API : prototype/in-process option
+API --> Application
+Application --> Domain
+Application --> Identity
+Application --> ReceiptAdapter
+Application --> NotificationAdapter
+Application --> ReportAdapter
+Domain --> SourceEffects
+note "Authorization and validation are enforced inside the trusted service; clients cannot write effects directly." as N
+@enduml

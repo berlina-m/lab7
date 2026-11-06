@@ -1,0 +1,29 @@
+@startuml
+title Core and adapter direction
+package Clients { [Web]; [Android]; [iOS]; [Swing] }
+package Core {
+ [API/application use cases] as App
+ [Domain: allocation/approval/ledger/payment] as Domain
+ interface Persistence
+ interface Identity
+ interface Receipts
+ interface Delivery
+ interface Reports
+}
+package Adapters { [Persistence adapter] as PA; [Identity adapter] as IA; [Receipt adapter] as RA; [Delivery adapter] as DA; [Report adapter] as QA }
+[Web] --> App
+[Android] --> App
+[iOS] --> App
+[Swing] --> App
+App --> Domain
+App --> Persistence
+App --> Identity
+App --> Receipts
+App --> Delivery
+App --> Reports
+PA ..|> Persistence
+IA ..|> Identity
+RA ..|> Receipts
+DA ..|> Delivery
+QA ..|> Reports
+@enduml

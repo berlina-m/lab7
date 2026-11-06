@@ -1,0 +1,15 @@
+@startuml
+title Auditable expense domain
+class ExpenseRevision { id; payerId; amount: BigDecimal; currency; orderedParticipantIds; state; version }
+class Allocation { participantId; amount: BigDecimal; sequence }
+class ApprovalDecision { reviewerId; decision; idempotencyKey }
+class FinancialEffect { id; type; from; to; amount: BigDecimal; sourceId }
+class Payment { id; payer; payee; amount: BigDecimal; idempotencyKey }
+class PairwiseBalance { memberA; memberB; net: BigDecimal }
+ExpenseRevision "1" o-- "1..*" Allocation
+ExpenseRevision "1" o-- "0..*" ApprovalDecision
+ExpenseRevision "1" --> "0..*" FinancialEffect : approved only
+Payment --> FinancialEffect : settlement effect
+FinancialEffect --> PairwiseBalance : projection/reconciliation
+note "Ordered participants drive equal-split remainder; self-obligations eliminated" as N
+@enduml
