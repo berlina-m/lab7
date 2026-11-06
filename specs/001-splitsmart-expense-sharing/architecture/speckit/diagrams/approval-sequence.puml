@@ -1,0 +1,16 @@
+@startuml
+title Expense approval and balance effect
+actor Reviewer
+participant "Use case" as UC
+participant "Expense" as E
+participant "Approval policy" as A
+participant "Balance effect ledger" as B
+Reviewer -> UC: approve(expense, version)
+UC -> E: verify PENDING
+UC -> A: authorize reviewer
+A --> UC: authorized
+UC -> E: record decision APPROVED
+UC -> B: apply once(effect identity)
+B --> UC: committed
+UC --> Reviewer: success or actionable error
+@enduml

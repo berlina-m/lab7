@@ -1,0 +1,36 @@
+@startuml
+title SplitSmart component boundaries
+package Presentation {
+ [Swing]
+ [Web]
+ [Android]
+ [iOS]
+}
+package Application {
+ [Use cases]
+ [Authorization policy]
+ [Ports]
+}
+package Domain {
+ [Expense and allocation]
+ [Approval]
+ [Balance and payment]
+ [Reporting]
+}
+package Infrastructure {
+ [Repository adapters]
+ [Receipt adapter]
+ [Notification adapter]
+}
+[Swing] --> [Use cases]
+[Web] --> [Use cases]
+[Android] --> [Use cases]
+[iOS] --> [Use cases]
+[Use cases] --> [Authorization policy]
+[Use cases] --> [Expense and allocation]
+[Use cases] --> [Approval]
+[Use cases] --> [Balance and payment]
+[Use cases] --> [Reporting]
+[Use cases] --> [Ports]
+[Infrastructure] ..|> [Ports]
+@enduml

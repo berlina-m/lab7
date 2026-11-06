@@ -1,0 +1,41 @@
+@startuml
+title SplitSmart Critical Flows (Proposed)
+actor Member
+actor Reviewer
+participant Client
+participant Application
+participant Domain
+database Store
+participant NotificationAdapter
+
+== Submit and notify ==
+Member -> Client: submit expense
+Client -> Application: SubmitExpense(command)
+Application -> Domain: validate membership, payer, split
+Domain --> Application: calculated shares / validation result
+Application -> Store: save PENDING expense
+Application -> NotificationAdapter: publish new-expense event
+NotificationAdapter --> Application: delivered or failed/retryable
+Application --> Client: success: pending / actionable error
+
+== Review and balance effect ==
+Reviewer -> Application: ReviewExpense(approve/reject)
+Application -> Store: check version and reviewer policy
+Application -> Domain: transition status
+alt approved
+  Domain -> Domain: create one approved effect set
+  Application -> Store: commit decision + unique effects
+else rejected
+  Application -> Store: commit rejection only
+end
+Application --> Client: status and balance-effect outcome
+
+== Payment ==
+Member -> Application: RecordPayment
+Application -> Store: lock/check current obligation
+alt amount <= outstanding
+  Application -> Store: record payment and reduce projection
+else amount > outstanding
+  Application --> Client: reject; no mutation
+end
+@enduml

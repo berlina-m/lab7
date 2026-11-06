@@ -1,0 +1,19 @@
+@startuml
+title SplitSmart expense submission
+actor Submitter
+participant "Expense use case" as UC
+participant "Authorization policy" as Auth
+participant "Allocation service" as Alloc
+participant "Expense repository" as Repo
+participant "Notification port" as Notify
+Submitter -> UC: submit expense
+UC -> Auth: verify active group member
+Auth --> UC: allowed/denied
+UC -> Alloc: validate and calculate shares
+Alloc --> UC: ordered shares or error
+UC -> Repo: save PENDING expense
+Repo --> UC: saved
+UC -> Notify: notify other active members
+Notify --> UC: delivery result
+UC --> Submitter: pending confirmation
+@enduml

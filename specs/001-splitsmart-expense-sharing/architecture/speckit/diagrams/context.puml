@@ -1,0 +1,26 @@
+@startuml
+title SplitSmart system context (proposed)
+actor AccountHolder
+actor Reviewer
+rectangle "SplitSmart application/domain boundary" as Core
+rectangle "Swing MVP adapter" as Swing
+rectangle "Web adapter (required target)" as Web
+rectangle "Android adapter (required target)" as Android
+rectangle "iOS adapter (required target)" as IOS
+cloud "Persistence port" as Store
+cloud "Notification port" as Notify
+AccountHolder --> Swing
+AccountHolder --> Web
+AccountHolder --> Android
+AccountHolder --> IOS
+Reviewer --> Swing
+Reviewer --> Web
+Reviewer --> Android
+Reviewer --> IOS
+Swing --> Core
+Web --> Core
+Android --> Core
+IOS --> Core
+Core --> Store
+Core --> Notify
+@enduml

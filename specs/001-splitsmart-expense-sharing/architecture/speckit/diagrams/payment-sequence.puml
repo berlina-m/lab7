@@ -1,0 +1,19 @@
+@startuml
+title SplitSmart payment settlement
+actor Payer
+participant "Payment use case" as UC
+participant "Balance service" as Bal
+participant "Payment repository" as Repo
+Payer -> UC: record payment
+UC -> Bal: calculate current payer-to-recipient outstanding
+Bal --> UC: outstanding amount
+alt amount exceeds outstanding
+  UC --> Payer: actionable rejection
+else valid amount
+  UC -> Repo: save payment transactionally
+  Repo --> UC: committed
+  UC -> Bal: project reduced balance
+  Bal --> UC: updated balance
+  UC --> Payer: success confirmation
+end
+@enduml

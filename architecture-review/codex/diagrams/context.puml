@@ -1,0 +1,42 @@
+@startuml
+title SplitSmart System Context (Proposed)
+actor "Account holder" as user
+actor "Group organizer / reviewer" as reviewer
+rectangle "SplitSmart" {
+  usecase "Accounts and groups" as accounts
+  usecase "Expenses and review" as expenses
+  usecase "Balances and payments" as balances
+  usecase "Notifications and reports" as reports
+}
+rectangle "Web client" as web
+rectangle "Android client" as android
+rectangle "iOS client" as ios
+rectangle "Swing MVP client" as swing
+user --> web
+user --> android
+user --> ios
+user --> swing
+reviewer --> web
+reviewer --> swing
+web --> accounts
+web --> expenses
+web --> balances
+web --> reports
+android --> accounts
+android --> expenses
+android --> balances
+android --> reports
+ios --> accounts
+ios --> expenses
+ios --> balances
+ios --> reports
+swing --> accounts
+swing --> expenses
+swing --> balances
+swing --> reports
+note right of swing
+Prototype subset only;
+not a substitute for
+web, Android, or iOS.
+end note
+@enduml

@@ -1,0 +1,37 @@
+@startuml
+title SplitSmart Domain Model (Proposed)
+class Account
+class Group
+class Membership
+class Expense
+class ExpenseShare
+class ReviewDecision
+class Notification
+class Balance
+class Payment
+class Report
+enum ExpenseStatus { PENDING; APPROVED; REJECTED }
+enum SplitMethod { EQUAL; PERCENTAGE }
+Account "1" -- "0..*" Membership
+Group "1" -- "0..*" Membership
+Group "1" -- "0..*" Expense
+Expense "1" -- "1" Account : submitter
+Expense "1" -- "1" Account : payer
+Expense "1" -- "1..*" ExpenseShare
+ExpenseShare "*" -- "1" Account : participant
+Expense "1" -- "0..*" ReviewDecision
+Notification "*" -- "1" Account : recipient
+Notification "*" -- "1" Expense
+Balance "*" -- "1" Account : debtor
+Balance "*" -- "1" Account : creditor
+Payment "*" -- "1" Account : payer
+Payment "*" -- "1" Account : recipient
+Report "*" -- "1" Account : requester
+Expense --> ExpenseStatus
+Expense --> SplitMethod
+note right of Expense
+Payer is separate from
+ordered participants.
+Approved effects occur once.
+end note
+@enduml

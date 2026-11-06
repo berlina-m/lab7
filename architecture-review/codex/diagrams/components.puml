@@ -1,0 +1,45 @@
+@startuml
+title SplitSmart Component Architecture (Proposed)
+skinparam componentStyle rectangle
+package "Clients" {
+  [Swing presentation]
+  [Web adapter]
+  [Android adapter]
+  [iOS adapter]
+}
+package "Application boundary" {
+  [Use-case services]
+  [Authorization policy]
+  [Query/report services]
+}
+package "Domain core" {
+  [Accounts and groups]
+  [Expenses and review]
+  [Money allocation]
+  [Balance/effect ledger]
+  [Payments]
+}
+package "Ports and adapters" {
+  [Persistence adapter]
+  [Identity adapter]
+  [Receipt adapter]
+  [Notification adapter]
+}
+[Swing presentation] --> [Use-case services]
+[Web adapter] --> [Use-case services]
+[Android adapter] --> [Use-case services]
+[iOS adapter] --> [Use-case services]
+[Use-case services] --> [Authorization policy]
+[Use-case services] --> [Accounts and groups]
+[Use-case services] --> [Expenses and review]
+[Use-case services] --> [Money allocation]
+[Use-case services] --> [Balance/effect ledger]
+[Use-case services] --> [Payments]
+[Query/report services] --> [Authorization policy]
+[Use-case services] ..> [Persistence adapter]
+[Use-case services] ..> [Identity adapter]
+[Use-case services] ..> [Receipt adapter]
+[Use-case services] ..> [Notification adapter]
+note "Domain core has no dependency on Swing, transport, or persistence" as N
+N .. [Domain core]
+@enduml

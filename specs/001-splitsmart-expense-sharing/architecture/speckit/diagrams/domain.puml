@@ -1,0 +1,25 @@
+@startuml
+title SplitSmart domain model
+class Account
+class Group
+class Membership
+class Expense
+class ExpenseShare
+class ReviewDecision
+class Notification
+class Balance
+class Payment
+class Report
+Account "1" -- "many" Membership
+Group "1" -- "many" Membership
+Group "1" -- "many" Expense
+Expense "1" -- "many" ExpenseShare
+Expense "1" -- "many" ReviewDecision
+Account "1" -- "many" Notification
+Account "1" -- "many" Payment : payer/recipient
+Group "1" -- "many" Balance
+Report ..> Expense
+Report ..> Balance
+Report ..> Payment
+Expense --> Account : submitter/payer
+@enduml
